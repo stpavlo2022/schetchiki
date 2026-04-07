@@ -11,17 +11,17 @@
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Unbounded:wght@400;700&display=swap');
 
   :root {
-    --bg: #0f1923;
-    --surface: #1a2535;
-    --border: #2a3a50;
+    --bg: #0a0f18;
+    --surface: #141d2b;
+    --border: #1e2d42;
     --accent: #00d4ff;
     --accent2: #ff6b35;
-    --text: #e8f0fe;
-    --muted: #5a7a9a;
+    --text: #ffffff;
+    --muted: #7a9cbd;
     --success: #00e676;
     --warn: #ffab00;
     --danger: #ff1744;
-    --radius: 12px;
+    --radius: 14px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,6 +34,7 @@
     max-width: 480px;
     margin: 0 auto;
     padding: 0 0 80px;
+    font-size: 21px;
   }
 
   /* Header */
@@ -51,7 +52,7 @@
 
   .header-title {
     font-family: 'Unbounded', sans-serif;
-    font-size: 14px;
+    font-size: 21px;
     color: var(--accent);
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -64,7 +65,7 @@
     padding: 6px 14px;
     border-radius: 20px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
+    font-size: 14px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -78,11 +79,11 @@
   /* Status bar */
   .status-bar {
     background: var(--surface);
-    padding: 8px 20px;
+    padding: 10px 20px;
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 11px;
+    font-size: 17px;
     color: var(--muted);
     border-bottom: 1px solid var(--border);
   }
@@ -103,14 +104,15 @@
   }
   .tab {
     flex: 1;
-    padding: 12px;
+    padding: 14px 8px;
     text-align: center;
-    font-size: 11px;
+    font-size: 17px;
     color: var(--muted);
     cursor: pointer;
-    border-bottom: 2px solid transparent;
+    border-bottom: 3px solid transparent;
     transition: all 0.2s;
     letter-spacing: 1px;
+    font-weight: 500;
   }
   .tab.active {
     color: var(--accent);
@@ -123,11 +125,14 @@
 
   /* Section headers */
   .section-label {
-    font-size: 10px;
-    color: var(--muted);
+    font-size: 17px;
+    color: var(--accent);
     letter-spacing: 2px;
     text-transform: uppercase;
-    padding: 16px 4px 8px;
+    padding: 20px 4px 10px;
+    font-weight: 700;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
   }
 
   /* Meter card */
@@ -135,38 +140,40 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     overflow: hidden;
     cursor: pointer;
     transition: border-color 0.2s;
   }
   .meter-card:hover { border-color: var(--accent); }
-  .meter-card.has-reading { border-left: 3px solid var(--success); }
+  .meter-card.has-reading { border-left: 4px solid var(--success); }
   .meter-card.no-access { border-left: 3px solid var(--warn); }
   .meter-status.noaccess { color: var(--warn); }
 
   .meter-header {
     display: flex;
     align-items: center;
-    padding: 14px 16px;
-    gap: 12px;
+    padding: 18px 16px;
+    gap: 14px;
   }
 
   .meter-id {
     font-family: 'Unbounded', sans-serif;
-    font-size: 13px;
+    font-size: 23px;
     color: var(--accent);
-    min-width: 40px;
+    min-width: 52px;
+    font-weight: 700;
   }
 
   .meter-info { flex: 1; }
-  .meter-tenant { font-size: 12px; color: var(--text); }
-  .meter-building { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .meter-tenant { font-size: 20px; color: var(--text); font-weight: 500; }
+  .meter-building { font-size: 16px; color: var(--muted); margin-top: 3px; }
 
   .meter-status {
-    font-size: 11px;
+    font-size: 18px;
     color: var(--muted);
     text-align: right;
+    font-weight: 500;
   }
   .meter-status.done { color: var(--success); }
 
@@ -185,11 +192,12 @@
     margin-bottom: 12px;
   }
   .form-label {
-    font-size: 10px;
+    font-size: 17px;
     color: var(--muted);
     letter-spacing: 1px;
     text-transform: uppercase;
-    padding-top: 12px;
+    padding-top: 14px;
+    font-weight: 500;
   }
 
   input[type="number"], textarea {
@@ -198,7 +206,7 @@
     border-radius: 8px;
     color: var(--text);
     font-family: 'JetBrains Mono', monospace;
-    font-size: 16px;
+    font-size: 21px;
     padding: 12px 14px;
     width: 100%;
     outline: none;
@@ -209,7 +217,7 @@
     border-color: var(--accent);
   }
   textarea {
-    font-size: 13px;
+    font-size: 17px;
     resize: none;
     height: 70px;
   }
@@ -221,7 +229,7 @@
     border: none;
     border-radius: 8px;
     font-family: 'Unbounded', sans-serif;
-    font-size: 13px;
+    font-size: 17px;
     padding: 14px;
     cursor: pointer;
     transition: opacity 0.2s;
@@ -235,7 +243,7 @@
     color: var(--warn);
     border-radius: 8px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
+    font-size: 14px;
     padding: 14px 12px;
     cursor: pointer;
     white-space: nowrap;
@@ -255,16 +263,16 @@
     justify-content: space-between;
   }
   .queue-item .qi-left { flex: 1; }
-  .queue-item .qi-meter { font-size: 13px; color: var(--accent); }
-  .queue-item .qi-val { font-size: 12px; color: var(--text); margin-top: 2px; }
-  .queue-item .qi-date { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .queue-item .qi-meter { font-size: 21px; color: var(--accent); font-weight: 700; }
+  .queue-item .qi-val { font-size: 18px; color: var(--text); margin-top: 4px; }
+  .queue-item .qi-date { font-size: 16px; color: var(--muted); margin-top: 4px; }
   .qi-del {
     background: none;
     border: 1px solid var(--border);
     color: var(--muted);
     border-radius: 6px;
     padding: 4px 10px;
-    font-size: 11px;
+    font-size: 14px;
     cursor: pointer;
   }
 
@@ -272,10 +280,10 @@
     text-align: center;
     padding: 60px 20px;
     color: var(--muted);
-    font-size: 12px;
+    font-size: 16px;
     line-height: 1.8;
   }
-  .empty-icon { font-size: 40px; margin-bottom: 16px; opacity: 0.5; }
+  .empty-icon { font-size: 52px; margin-bottom: 16px; opacity: 0.5; }
 
   /* Progress bar */
   .progress-bar {
@@ -292,7 +300,7 @@
     transition: width 0.3s;
   }
   .progress-text {
-    font-size: 10px;
+    font-size: 13px;
     color: var(--muted);
     text-align: right;
   }
@@ -307,7 +315,7 @@
   }
   .setup-title {
     font-family: 'Unbounded', sans-serif;
-    font-size: 12px;
+    font-size: 16px;
     color: var(--accent);
     margin-bottom: 12px;
   }
@@ -317,7 +325,7 @@
     border-radius: 8px;
     color: var(--text);
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
+    font-size: 14px;
     padding: 10px 12px;
     width: 100%;
     outline: none;
@@ -330,7 +338,7 @@
     border: none;
     border-radius: 8px;
     font-family: 'Unbounded', sans-serif;
-    font-size: 11px;
+    font-size: 14px;
     padding: 10px 16px;
     cursor: pointer;
     width: 100%;
@@ -340,7 +348,7 @@
     border: 1px solid rgba(0,212,255,0.2);
     border-radius: 8px;
     padding: 12px;
-    font-size: 11px;
+    font-size: 14px;
     color: var(--muted);
     line-height: 1.7;
     margin-top: 8px;
@@ -359,12 +367,13 @@
     border: 1px solid var(--border);
     color: var(--muted);
     border-radius: 20px;
-    padding: 6px 14px;
+    padding: 10px 18px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
+    font-size: 17px;
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.2s;
+    font-weight: 500;
   }
   .filter-btn.active {
     background: var(--accent);
@@ -382,7 +391,7 @@
     color: var(--bg);
     padding: 10px 20px;
     border-radius: 20px;
-    font-size: 12px;
+    font-size: 16px;
     opacity: 0;
     transition: all 0.3s;
     z-index: 1000;
@@ -464,8 +473,8 @@
 // ══════════════════════════════════════════
 const METERS = [
   // ЭЛЕКТРО
-  {id:'Э1А', type:'elec', building:'Производственная база', tenant:'Служебный', note:''},
-  {id:'Э1Р', type:'elec', building:'Производственная база', tenant:'Служебный', note:''},
+  {id:'Э1А', type:'elec', building:'Производственная база', tenant:'Служебный', note:'Главный - АКТИВНАЯ'},
+  {id:'Э1Р', type:'elec', building:'Производственная база', tenant:'Служебный', note:'Главный - РЕАКТИВНАЯ'},
   {id:'Э2',  type:'elec', building:'Мастерские', tenant:'ИП Матьякубова Ш.Б.', note:'Даврон цех'},
   {id:'Э3',  type:'elec', building:'Мастерские', tenant:'ИП Ким Е.А.', note:'Елена мебель'},
   {id:'Э4',  type:'elec', building:'БРУ', tenant:'ИП Цыпкин А.А.', note:''},
