@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f1923">
+<title>Счётчики</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Unbounded:wght@400;700&display=swap');
+
+  :root {
+    --bg: #0f1923;
+    --surface: #1a2535;
+    --border: #2a3a50;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --text: #e8f0fe;
+    --muted: #5a7a9a;
+    --success: #00e676;
+    --warn: #ffab00;
+    --danger: #ff1744;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 80px;
+  }
+
+  /* Header */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .sync-btn {
+    background: none;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .sync-btn:hover { background: var(--accent); color: var(--bg); }
+  .sync-btn.syncing { border-color: var(--warn); color: var(--warn); }
+  .sync-btn.done { border-color: var(--success); color: var(--success); }
+
+  /* Status bar */
+  .status-bar {
+    background: var(--surface);
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--danger);
+    flex-shrink: 0;
+  }
+  .status-dot.online { background: var(--success); }
+
+  /* Tab bar */
+  .tabs {
+    display: flex;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+  .tab {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* Pages */
+  .page { display: none; padding: 16px 16px; }
+  .page.active { display: block; }
+
+  /* Section headers */
+  .section-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 16px 4px 8px;
+  }
+
+  /* Meter card */
+  .meter-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .meter-card:hover { border-color: var(--accent); }
+  .meter-card.has-reading { border-left: 3px solid var(--success); }
+  .meter-card.no-access { border-left: 3px solid var(--warn); }
+  .meter-status.noaccess { color: var(--warn); }
+
+  .meter-header {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .meter-id {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 13px;
+    color: var(--accent);
+    min-width: 40px;
+  }
+
+  .meter-info { flex: 1; }
+  .meter-tenant { font-size: 12px; color: var(--text); }
+  .meter-building { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  .meter-status {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+  }
+  .meter-status.done { color: var(--success); }
+
+  /* Input form */
+  .meter-form {
+    display: none;
+    padding: 0 16px 16px;
+    border-top: 1px solid var(--border);
+  }
+  .meter-form.open { display: block; }
+
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .form-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding-top: 12px;
+  }
+
+  input[type="number"], textarea {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    padding: 12px 14px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  input[type="number"]:focus, textarea:focus {
+    border-color: var(--accent);
+  }
+  textarea {
+    font-size: 13px;
+    resize: none;
+    height: 70px;
+  }
+
+  .save-btn {
+    width: 100%;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 13px;
+    padding: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 4px;
+  }
+  .save-btn:active { opacity: 0.8; }
+  .noaccess-btn {
+    flex: 0 0 auto;
+    background: none;
+    border: 1px solid var(--warn);
+    color: var(--warn);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 14px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .noaccess-btn:active { background: var(--warn); color: var(--bg); }
+
+  /* Queue page */
+  .queue-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .queue-item .qi-left { flex: 1; }
+  .queue-item .qi-meter { font-size: 13px; color: var(--accent); }
+  .queue-item .qi-val { font-size: 12px; color: var(--text); margin-top: 2px; }
+  .queue-item .qi-date { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .qi-del {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .empty-icon { font-size: 40px; margin-bottom: 16px; opacity: 0.5; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--border);
+    border-radius: 4px;
+    height: 4px;
+    margin: 12px 0 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+  .progress-text {
+    font-size: 10px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  /* Google Sheets setup */
+  .setup-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 12px;
+  }
+  .setup-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .setup-input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 10px 12px;
+    width: 100%;
+    outline: none;
+    margin-bottom: 10px;
+  }
+  .setup-input:focus { border-color: var(--accent); }
+  .setup-btn {
+    background: var(--accent2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px;
+    padding: 10px 16px;
+    cursor: pointer;
+    width: 100%;
+  }
+  .info-box {
+    background: rgba(0,212,255,0.05);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-top: 8px;
+  }
+
+  /* Filter buttons */
+  .filter-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--success);
+    color: var(--bg);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 12px;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 1000;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.error { background: var(--danger); color: white; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">⚡ СЧЁТЧИКИ</div>
+  <button class="sync-btn" id="syncBtn" onclick="syncData()">
+    <span id="syncIcon">↑</span>
+    <span id="syncText">Отправить</span>
+  </button>
+</div>
+
+<div class="status-bar">
+  <div class="status-dot" id="statusDot"></div>
+  <span id="statusText">Офлайн</span>
+  <span style="margin-left:auto" id="queueCount"></span>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showPage('meters', this)">СЧЁТЧИКИ</div>
+  <div class="tab" onclick="showPage('queue', this)">ОЧЕРЕДЬ</div>
+  <div class="tab" onclick="showPage('settings', this)">НАСТРОЙКИ</div>
+</div>
+
+<div class="page active" id="page-meters">
+  <div style="padding:8px 4px 0">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-text" id="progressText">0 / 0 заполнено</div>
+  </div>
+
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filterMeters('pending', this)">НЕ ЗАПОЛНЕНО</button>
+    <button class="filter-btn" onclick="filterMeters('elec', this)">ЭЛЕКТРО</button>
+    <button class="filter-btn" onclick="filterMeters('water', this)">ВОДА</button>
+    <button class="filter-btn" onclick="filterMeters('all', this)">ВСЕ</button>
+  </div>
+
+  <div id="metersList"></div>
+</div>
+
+<div class="page" id="page-queue">
+  <div class="section-label">Ожидают отправки</div>
+  <div id="queueList"></div>
+</div>
+
+<div class="page" id="page-settings">
+  <div class="section-label">Подключение к Google Sheets</div>
+  <div class="setup-card">
+    <div class="setup-title">GOOGLE APPS SCRIPT URL</div>
+    <input class="setup-input" id="scriptUrl" placeholder="https://script.google.com/macros/s/..." 
+           value="" oninput="saveSettings()">
+    <div class="info-box">
+      Вставьте URL вашего Google Apps Script который принимает данные и записывает в таблицу.<br><br>
+      Инструкция по настройке будет предоставлена отдельно.
+    </div>
+  </div>
+
+  <div class="setup-card">
+    <div class="setup-title">ДАТА СНЯТИЯ ПОКАЗАНИЙ</div>
+    <input class="setup-input" id="readingDate" type="date" oninput="saveSettings()">
+    <div class="info-box">Дата будет добавлена ко всем показаниям при отправке.</div>
+  </div>
+
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+// ДАННЫЕ СЧЁТЧИКОВ
+// ══════════════════════════════════════════
+const METERS = [
+  // ЭЛЕКТРО
+  {id:'Э1А', type:'elec', building:'Производственная база', tenant:'Служебный', note:''},
+  {id:'Э1Р', type:'elec', building:'Производственная база', tenant:'Служебный', note:''},
+  {id:'Э2',  type:'elec', building:'Мастерские', tenant:'ИП Матьякубова Ш.Б.', note:'Даврон цех'},
+  {id:'Э3',  type:'elec', building:'Мастерские', tenant:'ИП Ким Е.А.', note:'Елена мебель'},
+  {id:'Э4',  type:'elec', building:'БРУ', tenant:'ИП Цыпкин А.А.', note:''},
+  {id:'Э5',  type:'elec', building:'БРУ', tenant:'нет арендатора', note:'Второй этаж'},
+  {id:'Э6',  type:'elec', building:'БРУ', tenant:'ООО СТАТУС', note:''},
+  {id:'Э7',  type:'elec', building:'Некапитальное здание', tenant:'ООО ЮТЕПС', note:'Окна холодный цех'},
+  {id:'Э7а', type:'elec', building:'Некапитальное здание', tenant:'ООО ЮТЕПС', note:'Контрольный'},
+  {id:'Э8',  type:'elec', building:'Холодный ангар', tenant:'ООО МР БРУС', note:''},
+  {id:'Э9',  type:'elec', building:'Производственная база', tenant:'ООО ЮТЕПС', note:'Тёплый цех'},
+  {id:'Э10', type:'elec', building:'Производственная база', tenant:'ИП Романовская Т.И.', note:'Фанерщики'},
+  {id:'Э11', type:'elec', building:'Производственная база', tenant:'ИП Романовская Т.И.', note:'Кофе'},
+  {id:'Э12', type:'elec', building:'Производственная база', tenant:'ООО РАВИ', note:'Холодильники'},
+  {id:'Э13', type:'elec', building:'Производственная база', tenant:'ИП Михневич И.С.', note:'Пельмени'},
+  {id:'Э14', type:'elec', building:'Производственная база', tenant:'ИП Ишматова Э.А.', note:'Сауна'},
+  {id:'Э15', type:'elec', building:'Производственная база', tenant:'Фустаченко Д.В.', note:'Фотостудия'},
+  {id:'Э16', type:'elec', building:'Производственная база', tenant:'нет арендатора', note:'Веники'},
+  {id:'Э17', type:'elec', building:'Производственная база', tenant:'Фустаченко Д.В.', note:'Тир'},
+  {id:'Э19', type:'elec', building:'Вагончик Ислам', tenant:'Ислам', note:''},
+  {id:'Э20', type:'elec', building:'Офис у ворот', tenant:'нет арендатора', note:''},
+  {id:'Э21', type:'elec', building:'Производственная база', tenant:'Служебный', note:'Сторожа'},
+  {id:'Э22', type:'elec', building:'Производственная база', tenant:'Служебный', note:'Щитовая'},
+  {id:'Э23', type:'elec', building:'Производственная база', tenant:'ИП Матьякубова Ш.Б.', note:'Масло-мёд'},
+  {id:'Э24', type:'elec', building:'Компрессорная', tenant:'нет арендатора', note:''},
+  // ВОДА
+  {id:'В1Гл',type:'water', building:'Производственная база', tenant:'Служебный', note:'Общий'},
+  {id:'В2',  type:'water', building:'Мастерские', tenant:'ИП Матьякубова Ш.Б.', note:'Даврон цех'},
+  {id:'В3',  type:'water', building:'Мастерские', tenant:'ИП Ким Е.А.', note:''},
+  {id:'В5',  type:'water', building:'БРУ', tenant:'нет арендатора', note:'Второй этаж'},
+  {id:'В7',  type:'water', building:'Некапитальное здание', tenant:'ООО ЮТЕПС', note:''},
+  {id:'В9',  type:'water', building:'Производственная база', tenant:'ООО ЮТЕПС', note:'Тёплый цех'},
+  {id:'В9а', type:'water', building:'Производственная база', tenant:'ООО ЮТЕПС', note:'Новый Ян'},
+  {id:'В11', type:'water', building:'Производственная база', tenant:'ИП Романовская Т.И.', note:'Кофе'},
+  {id:'В13', type:'water', building:'Производственная база', tenant:'ИП Михневич И.С.', note:'Пельмени'},
+  {id:'В14', type:'water', building:'Производственная база', tenant:'ИП Ишматова Э.А.', note:'Сауна 1'},
+  {id:'В14а',type:'water', building:'Производственная база', tenant:'ИП Ишматова Э.А.', note:'Сауна 2'},
+  {id:'В17', type:'water', building:'Производственная база', tenant:'Фустаченко Д.В.', note:'Тир'},
+  {id:'В18', type:'water', building:'Мастерские', tenant:'Сосед', note:''},
+  {id:'В20', type:'water', building:'Офис у ворот', tenant:'нет арендатора', note:''},
+  {id:'В25', type:'water', building:'Производственная база', tenant:'Служебный', note:'Мастерские общий'},
+  {id:'В26', type:'water', building:'Производственная база', tenant:'Служебный', note:'Станки туалет'},
+  {id:'В27', type:'water', building:'Производственная база', tenant:'Служебный', note:'Умывальник офис'},
+  {id:'В28', type:'water', building:'Производственная база', tenant:'Служебный', note:'Унитаз офис'},
+];
+
+// ══════════════════════════════════════════
+// СОСТОЯНИЕ
+// ══════════════════════════════════════════
+let readings = JSON.parse(localStorage.getItem('readings') || '{}');
+let queue = JSON.parse(localStorage.getItem('queue') || '[]');
+let settings = JSON.parse(localStorage.getItem('settings') || '{}');
+let currentFilter = 'pending';
+let openMeterId = null;
+
+// Init settings
+if (!settings.date) {
+  const today = new Date();
+  settings.date = today.toISOString().split('T')[0];
+  saveSettings();
+}
+
+// ══════════════════════════════════════════
+// UI
+// ══════════════════════════════════════════
+function showPage(name, tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  tab.classList.add('active');
+  if (name === 'queue') renderQueue();
+  if (name === 'settings') loadSettings();
+}
+
+function filterMeters(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMeters();
+}
+
+function renderMeters() {
+  const list = document.getElementById('metersList');
+  let filtered = METERS;
+  if (currentFilter === 'elec') filtered = METERS.filter(m => m.type === 'elec');
+  if (currentFilter === 'water') filtered = METERS.filter(m => m.type === 'water');
+  if (currentFilter === 'pending') filtered = METERS.filter(m => !readings[m.id]);
+
+  list.innerHTML = '';
+  
+  // Group by building
+  const groups = {};
+  filtered.forEach(m => {
+    if (!groups[m.building]) groups[m.building] = [];
+    groups[m.building].push(m);
+  });
+
+  Object.entries(groups).forEach(([building, meters]) => {
+    const label = document.createElement('div');
+    label.className = 'section-label';
+    label.textContent = building;
+    list.appendChild(label);
+
+    meters.forEach(m => {
+      const hasReading = !!readings[m.id];
+      const isNoAccess = hasReading && readings[m.id].value === null;
+      const card = document.createElement('div');
+      card.className = 'meter-card' + (hasReading ? (isNoAccess ? ' no-access' : ' has-reading') : '');
+      card.innerHTML = `
+        <div class="meter-header" onclick="toggleMeter('${m.id}')">
+          <div class="meter-id">${m.id}</div>
+          <div class="meter-info">
+            <div class="meter-tenant">${m.tenant}</div>
+            <div class="meter-building">${m.type === 'elec' ? '⚡' : '💧'} ${m.note || ''}</div>
+          </div>
+          <div class="meter-status ${hasReading ? 'done' : ''}">
+            ${hasReading ? (readings[m.id].value !== null ? '✓ ' + readings[m.id].value : '⚠ нет доступа') : '—'}
+          </div>
+        </div>
+        <div class="meter-form ${openMeterId === m.id ? 'open' : ''}" id="form-${m.id}">
+          <div class="form-label">Показание</div>
+          <input type="number" id="val-${m.id}" placeholder="Введите показание"
+                 value="${readings[m.id] ? readings[m.id].value : ''}"
+                 inputmode="numeric">
+          <div class="form-label">Заметка (необязательно)</div>
+          <textarea id="note-${m.id}" placeholder="Комментарий...">${readings[m.id] ? readings[m.id].note : ''}</textarea>
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <button class="save-btn" onclick="saveReading('${m.id}')">СОХРАНИТЬ</button>
+            <button class="noaccess-btn" onclick="noAccess('${m.id}')">НЕТ ДОСТУПА</button>
+          </div>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  });
+
+  updateProgress();
+}
+
+function toggleMeter(id) {
+  if (openMeterId === id) {
+    openMeterId = null;
+  } else {
+    openMeterId = id;
+    setTimeout(() => {
+      const inp = document.getElementById('val-' + id);
+      if (inp) inp.focus();
+    }, 100);
+  }
+  renderMeters();
+}
+
+function saveReading(id) {
+  const val = document.getElementById('val-' + id).value;
+  const note = document.getElementById('note-' + id).value;
+  if (!val) { showToast('Введите показание', true); return; }
+  
+  const meter = METERS.find(m => m.id === id);
+  readings[id] = { value: parseFloat(val), note, timestamp: Date.now() };
+  localStorage.setItem('readings', JSON.stringify(readings));
+  
+  // Update existing queue entry or add new
+  const existingIdx = queue.findIndex(q => q.meter === id && !q.synced);
+  const entry = {
+    id: existingIdx >= 0 ? queue[existingIdx].id : Date.now(),
+    meter: id,
+    type: meter.type,
+    building: meter.building,
+    tenant: meter.tenant,
+    value: parseFloat(val),
+    note,
+    date: settings.date || new Date().toISOString().split('T')[0],
+    synced: false
+  };
+  if (existingIdx >= 0) {
+    queue[existingIdx] = entry;
+  } else {
+    queue.push(entry);
+  }
+  localStorage.setItem('queue', JSON.stringify(queue));
+  
+  openMeterId = null;
+  renderMeters();
+  updateQueueCount();
+  showToast('✓ Сохранено: ' + id + ' = ' + val);
+}
+
+function updateProgress() {
+  const total = METERS.length;
+  const done = Object.keys(readings).length;
+  const pct = total > 0 ? Math.round(done/total*100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = done + ' / ' + total + ' заполнено';
+}
+
+function updateQueueCount() {
+  const pending = queue.filter(q => !q.synced).length;
+  document.getElementById('queueCount').textContent = pending > 0 ? pending + ' ожид.' : '';
+}
+
+function noAccess(id) {
+  const meter = METERS.find(m => m.id === id);
+  readings[id] = { value: null, note: 'Нет доступа', timestamp: Date.now() };
+  localStorage.setItem('readings', JSON.stringify(readings));
+  
+  const existingIdx = queue.findIndex(q => q.meter === id && !q.synced);
+  const entry = {
+    id: existingIdx >= 0 ? queue[existingIdx].id : Date.now(),
+    meter: id,
+    type: meter.type,
+    building: meter.building,
+    tenant: meter.tenant,
+    value: null,
+    note: 'Нет доступа',
+    date: settings.date || new Date().toISOString().split('T')[0],
+    synced: false
+  };
+  if (existingIdx >= 0) {
+    queue[existingIdx] = entry;
+  } else {
+    queue.push(entry);
+  }
+  localStorage.setItem('queue', JSON.stringify(queue));
+  
+  openMeterId = null;
+  renderMeters();
+  updateQueueCount();
+  showToast('⚠ Отмечено: нет доступа');
+}
+
+function renderQueue() {
+  const list = document.getElementById('queueList');
+  if (queue.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div>Нет данных для отправки</div>';
+    return;
+  }
+  list.innerHTML = queue.map((q, i) => `
+    <div class="queue-item">
+      <div class="qi-left">
+        <div class="qi-meter">${q.meter} — ${q.value}</div>
+        <div class="qi-val">${q.tenant} · ${q.building}</div>
+        <div class="qi-date">${q.date} ${q.note ? '· ' + q.note : ''} ${q.synced ? '✓ отправлено' : '⏳ ожидает'}</div>
+      </div>
+      <button class="qi-del" onclick="deleteQueueItem(${i})">✕</button>
+    </div>
+  `).join('');
+}
+
+function deleteQueueItem(i) {
+  const item = queue[i];
+  // Remove reading too so meter shows as unfilled
+  if (item && readings[item.meter]) {
+    delete readings[item.meter];
+    localStorage.setItem('readings', JSON.stringify(readings));
+  }
+  queue.splice(i, 1);
+  localStorage.setItem('queue', JSON.stringify(queue));
+  renderQueue();
+  updateQueueCount();
+  renderMeters();
+}
+
+// ══════════════════════════════════════════
+// SYNC
+// ══════════════════════════════════════════
+async function syncData() {
+  const pending = queue.filter(q => !q.synced);
+  if (pending.length === 0) { showToast('Нет данных для отправки'); return; }
+  
+  const url = settings.scriptUrl;
+  if (!url) { showToast('Укажите URL в Настройках', true); return; }
+  
+  if (!navigator.onLine) { showToast('Нет интернета', true); return; }
+
+  const btn = document.getElementById('syncBtn');
+  const icon = document.getElementById('syncIcon');
+  const text = document.getElementById('syncText');
+  btn.className = 'sync-btn syncing';
+  icon.textContent = '⟳';
+  text.textContent = 'Отправка...';
+
+  let success = 0;
+  for (const item of pending) {
+    try {
+      await fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(item)
+      });
+      item.synced = true;
+      success++;
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
+  localStorage.setItem('queue', JSON.stringify(queue));
+  btn.className = 'sync-btn done';
+  icon.textContent = '✓';
+  text.textContent = 'Готово';
+  setTimeout(() => {
+    btn.className = 'sync-btn';
+    icon.textContent = '↑';
+    text.textContent = 'Отправить';
+  }, 3000);
+
+  updateQueueCount();
+  showToast('Отправлено: ' + success + ' из ' + pending.length);
+}
+
+// ══════════════════════════════════════════
+// SETTINGS & UTILS
+// ══════════════════════════════════════════
+function saveSettings() {
+  settings.scriptUrl = document.getElementById('scriptUrl')?.value || settings.scriptUrl || '';
+  settings.date = document.getElementById('readingDate')?.value || settings.date || '';
+  localStorage.setItem('settings', JSON.stringify(settings));
+}
+
+function loadSettings() {
+  if (document.getElementById('scriptUrl')) 
+    document.getElementById('scriptUrl').value = settings.scriptUrl || '';
+  if (document.getElementById('readingDate'))
+    document.getElementById('readingDate').value = settings.date || '';
+}
+
+function clearAll() {
+  if (!confirm('Все введённые показания текущей сессии будут удалены. Продолжить?')) return;
+  readings = {};
+  localStorage.setItem('readings', JSON.stringify(readings));
+  openMeterId = null;
+  renderMeters();
+  updateQueueCount();
+  showToast('Показания очищены');
+}
+
+function clearQueue() {
+  if (!confirm('Все данные в очереди на отправку будут удалены безвозвратно. Продолжить?')) return;
+  queue = [];
+  localStorage.setItem('queue', JSON.stringify(queue));
+  updateQueueCount();
+  renderQueue();
+  showToast('Очередь очищена');
+}
+
+function showToast(msg, error=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (error ? ' error' : '') + ' show';
+  setTimeout(() => t.className = 'toast', 3000);
+}
+
+// Online/offline status
+function updateOnlineStatus() {
+  const dot = document.getElementById('statusDot');
+  const text = document.getElementById('statusText');
+  if (navigator.onLine) {
+    dot.className = 'status-dot online';
+    text.textContent = 'Онлайн';
+  } else {
+    dot.className = 'status-dot';
+    text.textContent = 'Офлайн — данные сохраняются на телефоне';
+  }
+}
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+
+// QR code support - check URL params
+const urlParams = new URLSearchParams(window.location.search);
+const meterParam = urlParams.get('m');
+if (meterParam) {
+  openMeterId = meterParam;
+}
+
+// Init
+updateOnlineStatus();
+renderMeters();
+updateQueueCount();
+loadSettings();
+</script>
+</body>
+</html>
