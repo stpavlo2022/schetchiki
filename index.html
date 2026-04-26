@@ -5,8 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0f1923">
-<title>Счётчики</title>
+<meta name="theme-color" content="#0a0f18">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjgwIiBmaWxsPSIjMGEwZjE4Ii8+PHBvbHlnb24gcG9pbnRzPSIxNjAsNjAgMTAwLDI0MCAxNzUsMjQwIDEyMCw0NDAgMjYwLDIwMCAxODAsMjAwIDI0MCw2MCIgZmlsbD0iI2ZmNmIzNSIvPjxwYXRoIGQ9Ik0zNDAsODAgUTM0MCw4MCAyODAsMjAwIFEyNjAsMjQwIDI2MCwyODAgUTI2MCwzNjAgMzQwLDM4MCBRNDIwLDM2MCA0MjAsMjgwIFE0MjAsMjQwIDQwMCwyMDAgUTM0MCw4MCAzNDAsODAgWiIgZmlsbD0iIzAwZDRmZiIgb3BhY2l0eT0iMC44NSIvPjxlbGxpcHNlIGN4PSIzMjAiIGN5PSIyOTAiIHJ4PSIyMCIgcnk9IjMwIiBmaWxsPSJ3aGl0ZSIgb3BhY2l0eT0iMC4yNSIvPjx0ZXh0IHg9IjI1NiIgeT0iNDcwIiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssIEFyaWFsIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjYyIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjIiPtCh0KfQgdCi0KfQmNCa0Jg8L3RleHQ+PC9zdmc+">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjgwIiBmaWxsPSIjMGEwZjE4Ii8+PHBvbHlnb24gcG9pbnRzPSIxNjAsNjAgMTAwLDI0MCAxNzUsMjQwIDEyMCw0NDAgMjYwLDIwMCAxODAsMjAwIDI0MCw2MCIgZmlsbD0iI2ZmNmIzNSIvPjxwYXRoIGQ9Ik0zNDAsODAgUTM0MCw4MCAyODAsMjAwIFEyNjAsMjQwIDI2MCwyODAgUTI2MCwzNjAgMzQwLDM4MCBRNDIwLDM2MCA0MjAsMjgwIFE0MjAsMjQwIDQwMCwyMDAgUTM0MCw4MCAzNDAsODAgWiIgZmlsbD0iIzAwZDRmZiIgb3BhY2l0eT0iMC44NSIvPjxlbGxpcHNlIGN4PSIzMjAiIGN5PSIyOTAiIHJ4PSIyMCIgcnk9IjMwIiBmaWxsPSJ3aGl0ZSIgb3BhY2l0eT0iMC4yNSIvPjx0ZXh0IHg9IjI1NiIgeT0iNDcwIiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssIEFyaWFsIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjYyIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjIiPtCh0KfQgdCi0KfQmNCa0Jg8L3RleHQ+PC9zdmc+">
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjogIlx1MDQyMVx1MDQyN1x1MDQwMVx1MDQyMlx1MDQyN1x1MDQxOFx1MDQxYVx1MDQxOCIsICJzaG9ydF9uYW1lIjogIlx1MDQyMVx1MDQyN1x1MDQwMVx1MDQyMlx1MDQyN1x1MDQxOFx1MDQxYVx1MDQxOCIsICJzdGFydF91cmwiOiAiL3NjaGV0Y2hpa2kvIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwYTBmMTgiLCAidGhlbWVfY29sb3IiOiAiIzAwZDRmZiIsICJpY29ucyI6IFt7InNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSFpwWlhkQ2IzZzlJakFnTUNBMU1USWdOVEV5SWo0OGNtVmpkQ0IzYVdSMGFEMGlOVEV5SWlCb1pXbG5hSFE5SWpVeE1pSWdjbmc5SWpnd0lpQm1hV3hzUFNJak1HRXdaakU0SWk4K1BIQnZiSGxuYjI0Z2NHOXBiblJ6UFNJeE5qQXNOakFnTVRBd0xESTBNQ0F4TnpVc01qUXdJREV5TUN3ME5EQWdNall3TERJd01DQXhPREFzTWpBd0lESTBNQ3cyTUNJZ1ptbHNiRDBpSTJabU5tSXpOU0l2UGp4d1lYUm9JR1E5SWswek5EQXNPREFnVVRNME1DdzRNQ0F5T0RBc01qQXdJRkV5TmpBc01qUXdJREkyTUN3eU9EQWdVVEkyTUN3ek5qQWdNelF3TERNNE1DQlJOREl3TERNMk1DQTBNakFzTWpnd0lGRTBNakFzTWpRd0lEUXdNQ3d5TURBZ1VUTTBNQ3c0TUNBek5EQXNPREFnV2lJZ1ptbHNiRDBpSXpBd1pEUm1aaUlnYjNCaFkybDBlVDBpTUM0NE5TSXZQanhsYkd4cGNITmxJR040UFNJek1qQWlJR041UFNJeU9UQWlJSEo0UFNJeU1DSWdjbms5SWpNd0lpQm1hV3hzUFNKM2FHbDBaU0lnYjNCaFkybDBlVDBpTUM0eU5TSXZQangwWlhoMElIZzlJakkxTmlJZ2VUMGlORGN3SWlCbWIyNTBMV1poYldsc2VUMGlRWEpwWVd3Z1FteGhZMnNzSUVGeWFXRnNJaUJtYjI1MExYZGxhV2RvZEQwaU9UQXdJaUJtYjI1MExYTnBlbVU5SWpZeUlpQm1hV3hzUFNKM2FHbDBaU0lnZEdWNGRDMWhibU5vYjNJOUltMXBaR1JzWlNJZ2JHVjBkR1Z5TFhOd1lXTnBibWM5SWpJaVB0Q2gwS2ZRZ2RDaTBLZlFtTkNhMEpnOEwzUmxlSFErUEM5emRtYysiLCAic2l6ZXMiOiAiNTEyeDUxMiIsICJ0eXBlIjogImltYWdlL3N2Zyt4bWwifV19">
+<title>СЧЁТЧИКИ</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Unbounded:wght@400;700&display=swap');
 
@@ -147,6 +150,7 @@
   }
   .meter-card:hover { border-color: var(--accent); }
   .meter-card.has-reading { border-left: 4px solid var(--success); }
+  .meter-card.pending-reading { border-left: 4px solid var(--warn); }
   .meter-card.no-access { border-left: 3px solid var(--warn); }
   .meter-status.noaccess { color: var(--warn); }
 
@@ -440,7 +444,13 @@
 </div>
 
 <div class="page" id="page-queue">
-  <div class="section-label">Ожидают отправки</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 4px 8px">
+    <div class="section-label" style="padding:0;border:none">Очередь отправки</div>
+    <div style="display:flex;gap:8px">
+      <button onclick="clearSent()" style="background:none;border:1px solid var(--success);color:var(--success);border-radius:20px;padding:8px 12px;font-family:JetBrains Mono,monospace;font-size:12px;cursor:pointer">✓ Удалить отправленные</button>
+      <button onclick="clearQueueAll()" style="background:none;border:1px solid var(--danger);color:var(--danger);border-radius:20px;padding:8px 12px;font-family:JetBrains Mono,monospace;font-size:12px;cursor:pointer">✕ Очистить все показания</button>
+    </div>
+  </div>
   <div id="queueList"></div>
 </div>
 
@@ -528,12 +538,10 @@ let settings = JSON.parse(localStorage.getItem('settings') || '{}');
 let currentFilter = 'pending';
 let openMeterId = null;
 
-// Init settings
-if (!settings.date) {
-  const today = new Date();
-  settings.date = today.toISOString().split('T')[0];
-  saveSettings();
-}
+// Init settings - always update date to today
+const today = new Date();
+settings.date = today.toISOString().split('T')[0];
+saveSettings();
 
 // ══════════════════════════════════════════
 // UI
@@ -579,8 +587,9 @@ function renderMeters() {
     meters.forEach(m => {
       const hasReading = !!readings[m.id];
       const isNoAccess = hasReading && readings[m.id].value === null;
+      const isSynced = hasReading && readings[m.id].synced === true;
       const card = document.createElement('div');
-      card.className = 'meter-card' + (hasReading ? (isNoAccess ? ' no-access' : ' has-reading') : '');
+      card.className = 'meter-card' + (hasReading ? (isNoAccess ? ' no-access' : (isSynced ? ' has-reading' : ' pending-reading')) : '');
       card.innerHTML = `
         <div class="meter-header" onclick="toggleMeter('${m.id}')">
           <div class="meter-id">${m.id}</div>
@@ -588,8 +597,12 @@ function renderMeters() {
             <div class="meter-tenant">${m.tenant}</div>
             <div class="meter-building">${m.type === 'elec' ? '⚡' : '💧'} ${m.note || ''}</div>
           </div>
-          <div class="meter-status ${hasReading ? 'done' : ''}">
-            ${hasReading ? (readings[m.id].value !== null ? '✓ ' + readings[m.id].value : '⚠ нет доступа') : '—'}
+          <div class="meter-status" style="text-align:right">
+            ${hasReading ? (
+              '<div style="font-size:13px;color:var(--muted);margin-bottom:2px">' + new Date(readings[m.id].timestamp).toLocaleDateString('ru-RU') + '</div>' +
+              '<div style="font-weight:700;color:' + (isNoAccess ? 'var(--warn)' : (isSynced ? 'var(--success)' : 'var(--warn)')) + '">' + (isNoAccess ? '⚠ нет доступа' : readings[m.id].value) + '</div>' +
+              '<div style="font-size:13px;color:' + (isSynced ? 'var(--success)' : 'var(--warn)') + '">' + (isSynced ? '✓ отправлено' : '⏳ ожидает') + '</div>'
+            ) : '<span style="color:var(--muted)">—</span>'}
           </div>
         </div>
         <div class="meter-form ${openMeterId === m.id ? 'open' : ''}" id="form-${m.id}">
@@ -631,7 +644,7 @@ function saveReading(id) {
   if (!val) { showToast('Введите показание', true); return; }
   
   const meter = METERS.find(m => m.id === id);
-  readings[id] = { value: parseFloat(val), note, timestamp: Date.now() };
+  readings[id] = { value: parseFloat(val), note, timestamp: Date.now(), synced: false };
   localStorage.setItem('readings', JSON.stringify(readings));
   
   // Update existing queue entry or add new
@@ -675,7 +688,7 @@ function updateQueueCount() {
 
 function noAccess(id) {
   const meter = METERS.find(m => m.id === id);
-  readings[id] = { value: null, note: 'Нет доступа', timestamp: Date.now() };
+  readings[id] = { value: null, note: 'Нет доступа', timestamp: Date.now(), synced: false };
   localStorage.setItem('readings', JSON.stringify(readings));
   
   const existingIdx = queue.findIndex(q => q.meter === id && !q.synced);
@@ -714,11 +727,35 @@ function renderQueue() {
       <div class="qi-left">
         <div class="qi-meter">${q.meter} — ${q.value}</div>
         <div class="qi-val">${q.tenant} · ${q.building}</div>
-        <div class="qi-date">${q.date} ${q.note ? '· ' + q.note : ''} ${q.synced ? '✓ отправлено' : '⏳ ожидает'}</div>
+        <div class="qi-date">${q.date} ${q.note ? '· ' + q.note : ''} <span style="font-weight:700;color:${q.synced ? '#00e676' : '#ffab00'}">${q.synced ? '✓ отправлено' : '⏳ ожидает'}</span></div>
       </div>
       <button class="qi-del" onclick="deleteQueueItem(${i})">✕</button>
     </div>
   `).join('');
+}
+
+function clearSent() {
+  const count = queue.filter(q => q.synced).length;
+  if (count === 0) { showToast('Нет отправленных записей'); return; }
+  if (!confirm('Удалить ' + count + ' отправленных записей?')) return;
+  queue = queue.filter(q => !q.synced);
+  localStorage.setItem('queue', JSON.stringify(queue));
+  renderQueue();
+  updateQueueCount();
+  showToast('Удалено: ' + count);
+}
+
+function clearQueueAll() {
+  if (queue.length === 0) { showToast('Очередь уже пуста'); return; }
+  if (!confirm('Удалить все ' + queue.length + ' записей из очереди?')) return;
+  readings = {};
+  localStorage.setItem('readings', JSON.stringify(readings));
+  queue = [];
+  localStorage.setItem('queue', JSON.stringify(queue));
+  renderQueue();
+  renderMeters();
+  updateQueueCount();
+  showToast('Очередь очищена');
 }
 
 function deleteQueueItem(i) {
@@ -764,6 +801,10 @@ async function syncData() {
         body: JSON.stringify({...item, key: 'baza-schetchiki'})
       });
       item.synced = true;
+      if (readings[item.meter]) {
+        readings[item.meter].synced = true;
+        localStorage.setItem('readings', JSON.stringify(readings));
+      }
       success++;
     } catch(e) {
       console.error(e);
@@ -781,6 +822,8 @@ async function syncData() {
   }, 3000);
 
   updateQueueCount();
+  renderQueue();
+  renderMeters();
   showToast('Отправлено: ' + success + ' из ' + pending.length);
 }
 
