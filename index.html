@@ -755,7 +755,7 @@ function clearQueueAll() {
   renderQueue();
   renderMeters();
   updateQueueCount();
-  showToast('Очередь очищена');
+  showToast('Показания удалены');
 }
 
 function deleteQueueItem(i) {
@@ -859,7 +859,7 @@ function clearQueue() {
   localStorage.setItem('queue', JSON.stringify(queue));
   updateQueueCount();
   renderQueue();
-  showToast('Очередь очищена');
+  showToast('Показания удалены');
 }
 
 function showToast(msg, error=false) {
