@@ -425,6 +425,7 @@
   <div class="tab active" onclick="showPage('meters', this)">СЧЁТЧИКИ</div>
   <div class="tab" onclick="showPage('queue', this)">ОЧЕРЕДЬ</div>
   <div class="tab" onclick="showPage('settings', this)">НАСТРОЙКИ</div>
+  <div class="tab" onclick="showPage('help', this)">СПРАВКА</div>
 </div>
 
 <div class="page active" id="page-meters">
@@ -476,6 +477,62 @@
 </div>
 
 <div class="toast" id="toast"></div>
+
+<div class="page" id="page-help" style="padding:16px">
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px">
+    <div style="font-family:Unbounded,sans-serif;font-size:15px;color:var(--accent);margin-bottom:16px;letter-spacing:1px">КАК СНЯТЬ ПОКАЗАНИЯ</div>
+    <div style="font-size:15px;line-height:2;color:var(--text)">
+      1. Открывается фильтр <span style="color:var(--accent);font-weight:700">НЕ ЗАПОЛНЕНО</span> — видны только незаполненные счётчики<br>
+      2. Нажмите на нужный счётчик — откроется форма ввода<br>
+      3. Введите показание цифрами<br>
+      4. Нажмите <span style="color:var(--success);font-weight:700">СОХРАНИТЬ</span><br>
+      5. Счётчик станет <span style="color:var(--warn);font-weight:700">жёлтым</span> — ожидает отправки<br>
+      6. Когда есть интернет — нажмите <span style="color:var(--accent);font-weight:700">ОТПРАВИТЬ</span> вверху<br>
+      7. Счётчик станет <span style="color:var(--success);font-weight:700">зелёным</span> — отправлено ✓
+    </div>
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px">
+    <div style="font-family:Unbounded,sans-serif;font-size:15px;color:var(--warn);margin-bottom:16px;letter-spacing:1px">НЕТ ДОСТУПА К СЧЁТЧИКУ</div>
+    <div style="font-size:15px;line-height:2;color:var(--text)">
+      Если арендатора нет и счётчик недоступен:<br>
+      → Нажмите кнопку <span style="color:var(--warn);font-weight:700">НЕТ ДОСТУПА</span> вместо ввода показания<br>
+      → Счётчик отметится жёлтым<br>
+      → В базу уйдёт пометка без показания
+    </div>
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px">
+    <div style="font-family:Unbounded,sans-serif;font-size:15px;color:var(--accent);margin-bottom:16px;letter-spacing:1px">ФИЛЬТРЫ</div>
+    <div style="font-size:15px;line-height:2;color:var(--text)">
+      <span style="color:var(--accent);font-weight:700">НЕ ЗАПОЛНЕНО</span> — только счётчики без показания. Открывается по умолчанию.<br>
+      <span style="color:var(--accent);font-weight:700">ЭЛЕКТРО</span> — все электросчётчики (Э1А, Э2...)<br>
+      <span style="color:var(--accent);font-weight:700">ВОДА</span> — все водосчётчики (В1Гл, В2...)<br>
+      <span style="color:var(--accent);font-weight:700">ВСЕ</span> — все счётчики. Видно кто заполнен а кто нет.
+    </div>
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px">
+    <div style="font-family:Unbounded,sans-serif;font-size:15px;color:var(--accent);margin-bottom:16px;letter-spacing:1px">ВКЛАДКА ОЧЕРЕДЬ</div>
+    <div style="font-size:15px;line-height:2;color:var(--text)">
+      Здесь видны все введённые показания.<br>
+      <span style="color:var(--warn);font-weight:700">⏳ ожидает</span> — ещё не отправлено<br>
+      <span style="color:var(--success);font-weight:700">✓ отправлено</span> — успешно отправлено<br><br>
+      <span style="color:var(--success);font-weight:700">✓ Удалить отправленные</span> — убирает зелёные записи из списка<br>
+      <span style="color:var(--danger);font-weight:700">✕ Очистить все показания</span> — удаляет ВСЕ записи и сбрасывает все метки на счётчиках. Использовать только после отправки всех данных!
+    </div>
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px">
+    <div style="font-family:Unbounded,sans-serif;font-size:15px;color:var(--accent);margin-bottom:16px;letter-spacing:1px">НАСТРОЙКИ</div>
+    <div style="font-size:15px;line-height:2;color:var(--text)">
+      <span style="color:var(--accent);font-weight:700">Дата снятия показаний</span> — устанавливается автоматически на сегодня при каждом открытии приложения. Можно изменить вручную если снимаете показания за другой день.<br><br>
+      <span style="color:var(--accent);font-weight:700">URL скрипта</span> — адрес для отправки данных. Не менять без необходимости.
+    </div>
+  </div>
+
+</div>
 
 <script>
 // ══════════════════════════════════════════
